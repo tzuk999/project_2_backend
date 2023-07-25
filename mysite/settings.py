@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'corsheaders',
     "library.apps.LibraryConfig",
     'django.contrib.admin',
     'django.contrib.auth',
@@ -48,6 +49,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'mysite.urls'
@@ -122,3 +124,42 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+# Whitelist specific origins (recommended for production)
+# Replace 'http://example.com' with your allowed frontend origin(s)
+CORS_ALLOWED_ORIGINS = [
+    'http://127.0.0.1:5500',
+]
+
+# Allow specific HTTP methods (optional)
+CORS_ALLOW_METHODS = [
+    'GET',
+    'POST',
+    'PUT',
+    'PATCH',
+    'DELETE',
+    'OPTIONS',
+]
+
+# Allow specific headers (optional)
+CORS_ALLOW_HEADERS = [
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+]
+
+# Allow credentials (optional)
+CORS_ALLOW_CREDENTIALS = True
+
+# Set exposed headers (optional)
+CORS_EXPOSE_HEADERS = [
+    'x-custom-header',
+]
+
+# Set max age (optional)
+CORS_MAX_AGE = 3600
