@@ -51,5 +51,10 @@ def customers(request):
     for customer in all_customers:
         customer_data = {
             'id' : customer.id,
-            
+            'name' : customer.user.username,
+            'city' : customer.city,
+            'age' : customer.age
         }
+        customers_data.append(customer_data)
+    json_data = json.dumps(customers_data)
+    return JsonResponse(json_data, safe=False)

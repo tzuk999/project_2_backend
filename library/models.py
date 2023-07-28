@@ -20,8 +20,7 @@ class Books(models.Model):
 
 class Customers(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    name = models.CharField(max_length=50)
-    address = models.CharField(max_length=50)
+    city = models.CharField(max_length=50)
     age = models.IntegerField(default= 0)
 
 
