@@ -43,3 +43,13 @@ def loans(request):
         loans_data.append(loan_data)
     json_data = json.dumps(loans_data)
     return JsonResponse(json_data, safe=False)
+
+
+def customers(request):
+    all_customers = Customers.objects.all()
+    customers_data = []
+    for customer in all_customers:
+        customer_data = {
+            'id' : customer.id,
+            
+        }

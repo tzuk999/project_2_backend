@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils import timezone
+from django.contrib.auth.models import User
 
 # Create your models here.
 class Books(models.Model):
@@ -18,6 +19,7 @@ class Books(models.Model):
 
 
 class Customers(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=50)
     address = models.CharField(max_length=50)
     age = models.IntegerField(default= 0)
