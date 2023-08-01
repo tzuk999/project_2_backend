@@ -1,6 +1,6 @@
 from django.db import models
 from django.utils import timezone
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
 
 # Create your models here.
 class Books(models.Model):
@@ -18,9 +18,8 @@ class Books(models.Model):
     status = models.IntegerField(choices=StatusEnum.choices)
 
 
-class Customers(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    city = models.CharField(max_length=50)
+class Customers(AbstractUser):
+    city = models.CharField(max_length=50 ,null=True)
     age = models.IntegerField(default= 0)
 
 
