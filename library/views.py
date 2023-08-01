@@ -1,13 +1,14 @@
 from django.http import HttpResponse,JsonResponse
 from library.models import Books,Customers,Loans
 import json
+from django.db.models import Q
 
 # Create your views here.
 def index(request):
     return HttpResponse("Hello, world. You're at the library index.")
-#books
-def books(request):
-    all_books =  Books.objects.all()
+
+def books_json(books_objects):
+    all_books = books_objects
     books_data = []
     for book in all_books:
         book_data = {
@@ -22,9 +23,17 @@ def books(request):
 
     # Serialize the list of dictionaries into a JSON string
     json_data = json.dumps(books_data)
+    return json_data
+#books
+def books(request):
+    all_books =  Books.objects.all()
+    json_data = books_json(all_books)
 
     # Return the JSON response with the appropriate Content-Type header
     return JsonResponse(json_data, safe=False)
+
+def books_name(request, name):
+    all_books = Books.objects.filter(Q(name__iexact=name))
 
 
 #loans
