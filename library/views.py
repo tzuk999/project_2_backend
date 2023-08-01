@@ -2,6 +2,7 @@ from django.http import HttpResponse,JsonResponse
 from library.models import Books,Customers,Loans
 import json
 from django.db.models import Q
+from django.views.decorators.csrf import csrf_exempt
 
 # Create your views here.
 def index(request):
@@ -34,6 +35,8 @@ def books(request):
 
 def books_name(request, name):
     all_books = Books.objects.filter(Q(name__iexact=name))
+    json_data = books_json(all_books)
+    return JsonResponse(json_data, safe=False)
 
 
 #loans
@@ -60,10 +63,33 @@ def customers(request):
     for customer in all_customers:
         customer_data = {
             'id' : customer.id,
-            'name' : customer.user.username,
+            'name' : customer.username,
             'city' : customer.city,
-            'age' : customer.age
+            'age' : customer.age,
+            'email' : customer.email
         }
         customers_data.append(customer_data)
     json_data = json.dumps(customers_data)
     return JsonResponse(json_data, safe=False)
+
+
+@csrf_exempt
+def create_customer(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            print("Received data:", data)
+            username = data.get("username")
+            email = data.get("email")
+            city = data.get("city")
+            age = data.get("age")
+            password = data.get("password")
+
+            # Create the customer
+            customer = Customers.objects.create_user(username=username, email=email, city=city, age=age, password=password)
+
+            return JsonResponse({"message": "Customer created successfully."})
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=400)
+
+    return JsonResponse({"message": "Method not allowed."}, status=405)
