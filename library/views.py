@@ -3,6 +3,7 @@ from library.models import Books,Customers,Loans
 import json
 from django.db.models import Q
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth import authenticate, login
 
 # Create your views here.
 def index(request):
@@ -89,6 +90,29 @@ def create_customer(request):
             customer = Customers.objects.create_user(username=username, email=email, city=city, age=age, password=password)
 
             return JsonResponse({"message": "Customer created successfully."})
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=400)
+
+    return JsonResponse({"message": "Method not allowed."}, status=405)
+
+
+@csrf_exempt
+def login(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            username = data.get("username")
+            password = data.get("password")
+
+            # Authenticate the user
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                # Login the user and store user ID in the session
+                login(request, user)
+
+                return JsonResponse({"message": "Login successful."})
+            else:
+                return JsonResponse({"error": "Invalid credentials."}, status=401)
         except Exception as e:
             return JsonResponse({"error": str(e)}, status=400)
 

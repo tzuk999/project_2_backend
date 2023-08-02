@@ -163,3 +163,5 @@ CORS_EXPOSE_HEADERS = [
 
 # Set max age (optional)
 CORS_MAX_AGE = 3600
+
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'
