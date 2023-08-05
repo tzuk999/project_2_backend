@@ -4,6 +4,7 @@ import json
 from django.db.models import Q
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import authenticate, login
+from django.middleware.csrf import get_token
 
 # Create your views here.
 def index(request):
@@ -41,25 +42,38 @@ def books_name(request, name):
 
 
 #loans
-def loans(request):
-    all_loans = Loans.objects.all()
+def loans_json(loans_objects):
+    all_loans = loans_objects
     loans_data = []
     for loan in all_loans:
         loan_data = {
             'id': loan.id,
-            'customer': loan.customer,
-            'book': loan.book,
+            'customer': loan.customer.username,
+            'book': loan.book.name,
             'loan_date': loan.loan_date,
             'return_date': loan.return_date,
             'status': loan.get_status_display()
         }
         loans_data.append(loan_data)
     json_data = json.dumps(loans_data)
+    return json_data
+
+
+def loans(request):
+    all_loans = Loans.objects.all()
+    json_data = loans_json(all_loans)
     return JsonResponse(json_data, safe=False)
 
 
-def customers(request):
-    all_customers = Customers.objects.all()
+def loans_by_customer(request, customer_id):
+    all_loans = Loans.objects.filter(customer_id = customer_id)
+    json_data = loans_json(all_loans)
+    return JsonResponse(json_data, safe=False)
+
+
+
+def customers_json(customers_objects):
+    all_customers = customers_objects
     customers_data = []
     for customer in all_customers:
         customer_data = {
@@ -71,6 +85,12 @@ def customers(request):
         }
         customers_data.append(customer_data)
     json_data = json.dumps(customers_data)
+    return json_data
+
+
+def customers(request):
+    all_customers = Customers.objects.all()
+    json_data = customers_json(all_customers)
     return JsonResponse(json_data, safe=False)
 
 
@@ -101,11 +121,13 @@ def login(request):
     if request.method == 'POST':
         try:
             data = json.loads(request.body)
+            print("Received data:", data)
             username = data.get("username")
             password = data.get("password")
 
             # Authenticate the user
             user = authenticate(username=username, password=password)
+            
             if user is not None:
                 # Login the user and store user ID in the session
                 login(request, user)
@@ -117,3 +139,8 @@ def login(request):
             return JsonResponse({"error": str(e)}, status=400)
 
     return JsonResponse({"message": "Method not allowed."}, status=405)
+
+
+def get_csrf_token(request):
+    token = get_token(request)
+    return JsonResponse({'csrfToken': token})
