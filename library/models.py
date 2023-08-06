@@ -28,7 +28,15 @@ class Loans(models.Model):
     class StatusEnum(models.IntegerChoices):
         ON_TIME = 1
         LATE = 2
+
     customer = models.ForeignKey(Customers, on_delete=models.CASCADE)
     book = models.ForeignKey(Books, on_delete=models.CASCADE)
     loan_date = models.DateTimeField(default = timezone.now())
     return_date = models.DateTimeField(default= timezone.now())
+    
+    @property
+    def status(self):
+        if self.return_date < timezone.now():
+            return Loans.StatusEnum.LATE
+        else:
+            return Loans.StatusEnum.ON_TIME
