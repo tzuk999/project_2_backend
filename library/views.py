@@ -88,7 +88,7 @@ def customers_json(customers_objects):
     return json_data
 
 
-def customers(request):
+def all_customers(request):
     all_customers = Customers.objects.all()
     json_data = customers_json(all_customers)
     return JsonResponse(json_data, safe=False)
@@ -132,7 +132,11 @@ def mylogin(request):
                 # Login the user and store user ID in the session
                 login(request, user)
 
-                return JsonResponse({"message": "Login successful."})
+                return JsonResponse({
+                    "isAuthenticated": True,
+                    "username": user.username,
+                    "userId": user.id 
+                })
             else:
                 return JsonResponse({"error": "Invalid credentials."}, status=401)
         except Exception as e:
@@ -144,3 +148,4 @@ def mylogin(request):
 def get_csrf_token(request):
     token = get_token(request)
     return JsonResponse({'csrfToken': token})
+

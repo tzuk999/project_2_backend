@@ -10,6 +10,6 @@ urlpatterns = [
     path("books/<name>", views.books_name, name="books_name"),
     path("loans", views.loans, name="loans"),
     path("loans/<int:customer_id>", views.loans_by_customer, name="loans_by_customer"),
-    path("customers", views.customers, name="customers"),
+    path("customers", views.all_customers, name="all_customers"),
     path("create_customer", views.create_customer, name='create_customer')
 ]
