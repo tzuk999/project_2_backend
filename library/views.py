@@ -117,7 +117,7 @@ def create_customer(request):
 
 
 @csrf_exempt
-def login(request):
+def mylogin(request):
     if request.method == 'POST':
         try:
             data = json.loads(request.body)

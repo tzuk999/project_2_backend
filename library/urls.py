@@ -4,7 +4,7 @@ from . import views
 
 urlpatterns = [
     path('get_csrf_token', views.get_csrf_token, name='get_csrf_token'),
-    path('login', views.login, name='login'),
+    path('login', views.mylogin, name='mylogin'),
     path("", views.index, name="index"),
     path("books", views.books, name="books"),
     path("books/<name>", views.books_name, name="books_name"),
