@@ -3,7 +3,7 @@ from library.models import Books,Customers,Loans
 import json
 from django.db.models import Q
 from django.views.decorators.csrf import csrf_exempt
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.middleware.csrf import get_token
 
 # Create your views here.
@@ -148,4 +148,17 @@ def mylogin(request):
 def get_csrf_token(request):
     token = get_token(request)
     return JsonResponse({'csrfToken': token})
+
+
+@csrf_exempt
+def logout_user(request):
+    if request.method == 'POST':
+        try:
+            # Logout the user and clear the session
+            logout(request)
+            return JsonResponse({"message": "Logout successful."})
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=400)
+
+    return JsonResponse({"message": "Method not allowed."}, status=405)
 
