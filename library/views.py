@@ -5,6 +5,7 @@ from django.db.models import Q
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import authenticate, login, logout
 from django.middleware.csrf import get_token
+from django.utils import timezone
 
 # Create your views here.
 def index(request):
@@ -110,6 +111,39 @@ def create_customer(request):
             customer = Customers.objects.create_user(username=username, email=email, city=city, age=age, password=password)
 
             return JsonResponse({"message": "Customer created successfully."})
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=400)
+
+    return JsonResponse({"message": "Method not allowed."}, status=405)
+
+
+@csrf_exempt
+def create_loan(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            print("Received data:", data)
+            book_id = data["book_id"]
+            print(book_id)
+            customer_id = data["customer_id"]
+            book = Books.objects.filter(pk=book_id)
+            book = book[0]
+            book.status = 2
+            book.save()
+            print(book)
+            customer = Customers.objects.filter(pk=customer_id)
+            customer = customer[0]
+            loan_date = timezone.now()
+            print(book.book_type)
+            if book.book_type == 1:
+                return_date = loan_date + timezone.timedelta(days=10)
+            elif book.book_type == 2:
+                return_date = loan_date + timezone.timedelta(days=5)
+            elif book.book_type == 3:
+                return_date = loan_date + timezone.timedelta(days=2)
+            loan = Loans(customer = customer, book = book, loan_date = loan_date, return_date = return_date)
+            loan.save()
+            return JsonResponse({"message": "Book loaned successfully."})
         except Exception as e:
             return JsonResponse({"error": str(e)}, status=400)
 
