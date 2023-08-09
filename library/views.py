@@ -42,6 +42,12 @@ def books_name(request, name):
     return JsonResponse(json_data, safe=False)
 
 
+def customers_name(request, name):
+    all_customers = Customers.objects.filter(Q(username__iexact=name))
+    json_data = customers_json(all_customers)
+    return JsonResponse(json_data, safe=False)
+
+
 #loans
 def loans_json(loans_objects):
     all_loans = loans_objects
