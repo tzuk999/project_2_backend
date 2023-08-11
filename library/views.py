@@ -57,9 +57,9 @@ def loans_json(loans_objects):
             'id': loan.id,
             'customer': loan.customer.username,
             'book': loan.book.name,
-            'loan_date': loan.loan_date,
-            'return_date': loan.return_date,
-            'status': loan.get_status_display()
+            'loan_date': loan.loan_date.isoformat(),
+            'return_date': loan.return_date.isoformat(),
+            'status': loan.status 
         }
         loans_data.append(loan_data)
     json_data = json.dumps(loans_data)
@@ -74,6 +74,12 @@ def loans(request):
 
 def loans_by_customer(request, customer_id):
     all_loans = Loans.objects.filter(customer_id = customer_id)
+    json_data = loans_json(all_loans)
+    return JsonResponse(json_data, safe=False)
+
+
+def loans_by_book(request, book_id):
+    all_loans = Loans.objects.filter(book_id = book_id)
     json_data = loans_json(all_loans)
     return JsonResponse(json_data, safe=False)
 
