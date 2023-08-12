@@ -1,4 +1,5 @@
 from django.http import HttpResponse,JsonResponse
+from django.shortcuts import get_object_or_404
 from library.models import Books,Customers,Loans
 import json
 from django.db.models import Q
@@ -207,4 +208,18 @@ def logout_user(request):
             return JsonResponse({"error": str(e)}, status=400)
 
     return JsonResponse({"message": "Method not allowed."}, status=405)
+
+
+def delete_loan(request, loan_id):
+    loan = get_object_or_404(Loans, pk=loan_id)
+    book_id = loan.book.id
+    book = Books.objects.get(pk=book_id)
+    
+    if request.method == 'DELETE':
+        loan.delete()
+        book.status = 1
+        book.save()
+        return JsonResponse({'message': 'Loan deleted successfully.'}, status=204)
+    
+    return JsonResponse({'error': 'Method not allowed.'}, status=405)
 
