@@ -210,6 +210,7 @@ def logout_user(request):
     return JsonResponse({"message": "Method not allowed."}, status=405)
 
 
+@csrf_exempt
 def delete_loan(request, loan_id):
     loan = get_object_or_404(Loans, pk=loan_id)
     book_id = loan.book.id
