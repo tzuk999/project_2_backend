@@ -57,8 +57,8 @@ def loans_json(loans_objects):
             'id': loan.id,
             'customer': loan.customer.username,
             'book': loan.book.name,
-            'loan_date': loan.loan_date.isoformat(),
-            'return_date': loan.return_date.isoformat(),
+            'loan_date': loan.loan_date.strftime('%D'),
+            'return_date': loan.return_date.strftime('%D'),
             'status': loan.status 
         }
         loans_data.append(loan_data)
