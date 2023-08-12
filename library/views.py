@@ -57,6 +57,7 @@ def loans_json(loans_objects):
         loan_data = {
             'id': loan.id,
             'customer': loan.customer.username,
+            'customer_id':loan.customer.id,
             'book': loan.book.name,
             'loan_date': loan.loan_date.strftime('%D'),
             'return_date': loan.return_date.strftime('%D'),
