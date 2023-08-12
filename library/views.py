@@ -38,13 +38,13 @@ def books(request):
     return JsonResponse(json_data, safe=False)
 
 def books_name(request, name):
-    all_books = Books.objects.filter(Q(name__iexact=name))
+    all_books = Books.objects.filter(Q(name__icontains=name))
     json_data = books_json(all_books)
     return JsonResponse(json_data, safe=False)
 
 
 def customers_name(request, name):
-    all_customers = Customers.objects.filter(Q(username__iexact=name))
+    all_customers = Customers.objects.filter(Q(username__icontains=name))
     json_data = customers_json(all_customers)
     return JsonResponse(json_data, safe=False)
 
