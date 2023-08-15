@@ -33,7 +33,7 @@ class Loans(models.Model):
     book = models.ForeignKey(Books, on_delete=models.CASCADE)
     loan_date = models.DateTimeField(default = timezone.now())
     return_date = models.DateTimeField(default= timezone.now())
-    
+
     @property
     def status(self):
         if self.return_date < timezone.now():

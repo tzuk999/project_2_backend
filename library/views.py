@@ -85,6 +85,15 @@ def loans_by_book(request, book_id):
     json_data = loans_json(all_loans)
     return JsonResponse(json_data, safe=False)
 
+def late_loans(request):
+    all_loans = Loans.objects.all()
+    late_loans_list = []
+    for loan in all_loans:
+        if loan.status == 2:
+            late_loans_list.append(loan)
+    json_data = loans_json(late_loans_list)
+    return JsonResponse(json_data, safe=False)
+
 
 
 def customers_json(customers_objects):
