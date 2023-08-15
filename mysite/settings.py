@@ -128,6 +128,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Replace 'http://example.com' with your allowed frontend origin(s)
 CORS_ALLOWED_ORIGINS = [
     'http://127.0.0.1:5500',
+    'https://tzuks-library-project.onrender.com'
 ]
 
 # Allow specific HTTP methods (optional)
