@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-uoyxn%#i!yf8j$^sfgl2ym&*kl+6pawo+*$j-7dg@0o@z21j2u
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['tzuks-library.onrender.com']
 
 AUTH_USER_MODEL = "library.Customers"
 # Application definition
